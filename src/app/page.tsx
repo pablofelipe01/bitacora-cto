@@ -11,7 +11,7 @@ export default function Home() {
       {/* Contenido principal */}
       <div className="flex flex-col items-center justify-center min-h-screen">
         <h1 className="text-4xl font-bold mb-8 text-center museo-slab" style={{ color: 'FFFFFF' }}>
-          Bitacoras CTO
+          Bitacoras Sirius
         </h1>
       </div>
     </div>
