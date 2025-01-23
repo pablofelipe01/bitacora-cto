@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useState, useRef } from 'react';
 import confetti from 'canvas-confetti';
 import NavBar from '../components/NavBar';
 
@@ -8,12 +8,10 @@ export default function Observaciones() {
   const [isRecording, setIsRecording] = useState(false);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
-  const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
-  const [dataArray, setDataArray] = useState<Uint8Array | null>(null);
   const [isSending, setIsSending] = useState(false);
+  const [selectedUser, setSelectedUser] = useState('Angi'); // Usuario seleccionado por defecto
   const audioContextRef = useRef<AudioContext | null>(null);
   const audioPreviewRef = useRef<HTMLAudioElement | null>(null);
-  const waveBars = useRef<HTMLDivElement[]>([]);
 
   const initializeAudioContext = async () => {
     const AudioContextClass =
@@ -64,23 +62,6 @@ export default function Observaciones() {
     });
     setMediaRecorder(recorder);
 
-    if (audioContextRef.current) {
-      try {
-        const analyserNode = audioContextRef.current.createAnalyser();
-        const source = audioContextRef.current.createMediaStreamSource(stream);
-        source.connect(analyserNode);
-        analyserNode.fftSize = 256;
-        const bufferLength = analyserNode.frequencyBinCount;
-        const dataArray = new Uint8Array(bufferLength);
-        setDataArray(dataArray);
-        setAnalyser(analyserNode);
-
-        animateWaveform();
-      } catch (err) {
-        console.error('Error setting up audio analysis:', err);
-      }
-    }
-
     const chunks: BlobPart[] = [];
     recorder.ondataavailable = (e) => {
       if (e.data.size > 0) {
@@ -96,7 +77,6 @@ export default function Observaciones() {
         audioPreviewRef.current.src = url;
         audioPreviewRef.current.style.display = 'block';
       }
-      sendData(blob);
     };
 
     recorder.start(100);
@@ -110,25 +90,8 @@ export default function Observaciones() {
     }
   };
 
-  const animateWaveform = () => {
-    if (!analyser || !dataArray) return;
-
-    analyser.getByteFrequencyData(dataArray);
-    waveBars.current.forEach((bar, i) => {
-      if (bar) {
-        const value = dataArray[i * 2];
-        const percent = value / 255;
-        bar.style.height = `${percent * 100}%`;
-      }
-    });
-
-    if (isRecording) {
-      requestAnimationFrame(animateWaveform);
-    }
-  };
-
-  const sendData = async (blob: Blob) => {
-    if (!blob) {
+  const sendData = async () => {
+    if (!audioBlob) {
       alert('Please record audio before sending.');
       return;
     }
@@ -136,11 +99,12 @@ export default function Observaciones() {
     setIsSending(true);
 
     const formData = new FormData();
-    formData.append('audio', blob, `recording.${blob.type.includes('webm') ? 'webm' : 'mp4'}`);
+    formData.append('audio', audioBlob, `recording.${audioBlob.type.includes('webm') ? 'webm' : 'mp4'}`);
+    formData.append('user', selectedUser);
 
     try {
       const response = await fetch(
-        'https://tok-n8n-sol.onrender.com/webhook/ac8c334c-e847-40a9-94e7-aa3a66d93470',
+        'https://tok-n8n-sol.onrender.com/webhook-test/ac8c334c-e847-40a9-94e7-aa3a66d93470',
         {
           method: 'POST',
           body: formData,
@@ -161,7 +125,6 @@ export default function Observaciones() {
           audioPreviewRef.current.style.display = 'none';
           audioPreviewRef.current.src = '';
         }
-        reloadPage();
       } else {
         throw new Error(`Server responded with status: ${response.status}. Response: ${responseText}`);
       }
@@ -173,28 +136,23 @@ export default function Observaciones() {
     }
   };
 
-  const reloadPage = () => {
-    window.location.reload();
-  };
-
   return (
     <>
       <NavBar />
       <div className="flex justify-center items-center min-h-screen p-6">
         <div className="w-full max-w-lg p-6 bg-white rounded-lg shadow-lg border-4 border-indigo-700">
           <div className="flex justify-center items-center mb-5">
-            <div className="flex space-x-1 h-20">
-              {Array.from({ length: 32 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="w-1 bg-gradient-to-t from-red-400 to-red-600 transition-all duration-100 ease-linear"
-                  style={{ height: '20%' }}
-                  ref={(el) => {
-                    if (el) waveBars.current[i] = el;
-                  }}
-                ></div>
-              ))}
-            </div>
+            <select
+              value={selectedUser}
+              onChange={(e) => setSelectedUser(e.target.value)}
+              className="border p-2 rounded-md"
+            >
+              <option value="Angi">Angi</option>
+              <option value="Jerson">Jerson</option>
+              <option value="David">David</option>
+              <option value="Pablo">Pablo</option>
+              <option value="Joys">Joys</option>
+            </select>
           </div>
 
           <div className="flex justify-center mb-5">
@@ -207,20 +165,22 @@ export default function Observaciones() {
             </button>
           </div>
 
+          <div className="flex justify-center mb-5">
+            <button
+              onClick={sendData}
+              className="bg-blue-500 text-white py-2 px-4 rounded-md"
+              disabled={!audioBlob || isSending}
+            >
+              Enviar Datos
+            </button>
+          </div>
+
           <audio
             ref={audioPreviewRef}
             controls
             className={`w-full ${audioBlob ? '' : 'hidden'} mb-5`}
             playsInline
           />
-
-          <div className="flex justify-center items-center mb-5">
-            <div className="text-center">
-              <div className="mb-2 text-gray-800">
-                Audio Status: {audioBlob ? '✅ Recorded' : '❌ Not recorded'}
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </>
