@@ -152,6 +152,7 @@ export default function Observaciones() {
               <option value="David">David</option>
               <option value="Pablo">Pablo</option>
               <option value="Joys">Joys</option>
+              <option value="Luisa">Luisa</option>
             </select>
           </div>
 
