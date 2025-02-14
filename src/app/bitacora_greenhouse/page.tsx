@@ -103,7 +103,7 @@ export default function Observaciones() {
     formData.append('user', selectedUser);
 
     try {
-      const response = await fetch( 'https://tok-n8n-sol.onrender.com/webhook-test/ac8c334c-e847-40a9-94e7-aa3a66d93470',
+      const response = await fetch( 'https://tok-n8n-sol.onrender.com/webhook/ac8c334c-e847-40a9-94e7-aa3a66d93470',
         {
           method: 'POST',
           body: formData,
