@@ -99,9 +99,9 @@ const NavBar: React.FC = () => {
             </Link>
             <Link
               href="/bitacora_greenhouse"
-              className="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium"
+              className="block pl-3 pr-4 py-2 border-l-4 border-blue-500 text-base font-medium text-white bg-gray-800 focus:outline-none focus:bg-gray-700 focus:border-blue-500"
             >
-              Green House
+              Bitácora
             </Link>
             <Link
               href="/dashboard"
