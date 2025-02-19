@@ -101,7 +101,7 @@ const NavBar: React.FC = () => {
               href="/bitacora_greenhouse"
               className="block pl-3 pr-4 py-2 border-l-4 border-blue-500 text-base font-medium text-white bg-gray-800 focus:outline-none focus:bg-gray-700 focus:border-blue-500"
             >
-              Bitácora
+              Green House
             </Link>
             <Link
               href="/dashboard"
