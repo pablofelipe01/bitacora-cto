@@ -146,6 +146,7 @@ export default function Observaciones() {
               onChange={(e) => setSelectedUser(e.target.value)}
               className="border p-2 rounded-md"
             >
+              <option value="Joys Moreno">Joys Moreno</option>
               <option value="Ramiro Ramos">Ramiro Ramos</option>
               <option value="William Méndez">William Méndez</option>
             </select>
