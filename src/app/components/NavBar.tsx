@@ -66,16 +66,22 @@ const NavBar: React.FC = () => {
               Bitácora
             </Link>
             <Link
+              href="/dashboard"
+              className="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium"
+            >
+              Dashboard
+            </Link>
+            <Link
               href="/bitacora_greenhouse"
               className="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium"
             >
               Green House
             </Link>
             <Link
-              href="/dashboard"
+              href="/dashboard_greenhouse"
               className="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium"
             >
-              Dashboard
+              Dashboard Green House
             </Link>
           </div>
         </div>
@@ -98,16 +104,22 @@ const NavBar: React.FC = () => {
               Bitácora
             </Link>
             <Link
+              href="/dashboard"
+              className="block pl-3 pr-4 py-2 border-l-4 border-blue-500 text-base font-medium text-white bg-gray-800 focus:outline-none focus:bg-gray-700 focus:border-blue-500"
+            >
+              Dashboard
+            </Link>
+            <Link
               href="/bitacora_greenhouse"
               className="block pl-3 pr-4 py-2 border-l-4 border-blue-500 text-base font-medium text-white bg-gray-800 focus:outline-none focus:bg-gray-700 focus:border-blue-500"
             >
               Green House
             </Link>
             <Link
-              href="/dashboard"
+              href="/dashboard_greenhouse"
               className="block pl-3 pr-4 py-2 border-l-4 border-blue-500 text-base font-medium text-white bg-gray-800 focus:outline-none focus:bg-gray-700 focus:border-blue-500"
             >
-              Dashboard
+              Dashboard Green House
             </Link>
           </div>
         </div>
